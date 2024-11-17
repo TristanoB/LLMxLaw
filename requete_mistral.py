@@ -30,6 +30,7 @@ def make_final_prompt(liste_texte_loi, pb):
     prompt+= pb + "\n"
     prompt+= "J'aimerais que tu me fasses un courrier d'avocat en utilisant les textes de lois suivants si tu les trouves pertinent,\n "
     prompt+= "N'hesite pas à bien développé tes arguments et à citer les texte avec des tirets \n "
+    prompt+= "Vérifie si cette mise en demeure est conforme à la législation française en vigueur. la date de rédaction ; les coordonnées du destinataire ; les coordonnées de l'expéditeur ; un bref exposé du litige : il est important de décrire clairement les circonstances qui ont donné naissance au litige pour éviter toute mauvaise compréhension de la part du destinataire ; la mention mise en demeure : cette mention indique au destinataire qu'il s'agit de la première étape d'une procédure qui vous permettra ensuite de saisir le juge si vous n'obtenez pas de réponse satisfaisante ; la réclamation, soit ce que doit effectuer le destinataire afin de régler le litige ; un délai précis et raisonnable durant lequel le destinataire devra régler le litige, compris le plus souvent entre 8 et 15 jours selon la nature du litige ; la signature de l'expéditeur."
     prompt+= " Voici les textes de lois : \n"
 
     for text in liste_texte_loi:
