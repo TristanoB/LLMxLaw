@@ -34,15 +34,20 @@ def re_run():
      
     selection = [element for element, var in valeurs_cases.items() if var.get()]
     # Vous pouvez ici utiliser 'selection' selon vos besoins (supprimer, afficher, etc.)
-    texte = entree_texte.get("1.0", tk.END) 
+    print(selection)
+    texte_actu=zone_affichage.get("1.0", tk.END).strip()
+    print(texte_actu)
 
-    reponse=appel_mistral(texte_final)
-    prompt = "Je vais te donner un courrier d'avocat, j'ai besoin que tu m'extraies toutes les citations juridiques de cette lettre. Voici la lettre :\n" + reponse + "\n je veux que tu me le fasses absolument sous le format suivant, c'est très important: [FONDEMENT]référence n°1[/FONDEMENT][FONDEMENT]référence n°2[/FONDEMENT][FONDEMENT]référence n°3[/FONDEMENT]etc..."
+    reponse=enlever_fondement_nul(texte_actu, selection)
+    print('reponse_new =: ', reponse)
+    prompt = "Je vais te donner un courrier d'avocat, j'ai besoin que tu m'extraies toutes les citations juridiques (uniquement les articles et jurisprudences, pas les textes en tant que tel stp, JE VEUX UNIQUEMENT LA RÉFÉRENCE) de cette lettre. Voici la lettre :\n" + texte_actu + "\n je veux que tu me le fasses absolument sous le format suivant, c'est très important: [FONDEMENT]référence n°1[/FONDEMENT][FONDEMENT]référence n°2[/FONDEMENT][FONDEMENT]référence n°3[/FONDEMENT]etc..."
     fondements = appel_mistral(prompt)
     fondements_liste = []
     for f in fondements.split("[FONDEMENT]"):
         if "[/FONDEMENT]" in f:
             fondements_liste.append(f.split("[/FONDEMENT]")[0] )
+    for widget in cadre_cases_parent.winfo_children():
+        widget.destroy()
     afficher_texte(reponse)
     afficher_fondement(fondements_liste)
 
@@ -87,6 +92,7 @@ def afficher_fondement(liste_elements):
     # Bouton pour valider les choix
     bouton_valider = ttk.Button(cadre_cases_parent, text="enlever", command=re_run)
     bouton_valider.grid(row=len(liste_elements), column=0, sticky='w', padx=5, pady=10)
+    print('afficher_fondements a run ')
 
 
 def enregistrer():
