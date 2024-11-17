@@ -24,12 +24,20 @@ def appel_mistral(texte):
     return Reponse
 
 
+date_redaction = None
+coordonne_destinataire = None
+coordonne_expediteur = None
+bref_expose_litige = None
+reclamation = None
+delai = None
+
 def make_final_prompt(liste_texte_loi, pb): 
     prompt= "Tu es un avocat dans le droit immobilier, tu connais parfaitement le droit, et on te fournira des textes les plus pertinents pour répondre à ce dont tu as besoin. Il est très important que tu respectes les consignes pour satisfaire ton client."
     prompt+="j'ai un problème de droit immobilier. Voici mon problème : \n"
     prompt+= pb + "\n"
     prompt+= "J'aimerais que tu me fasses un courrier d'avocat en utilisant les textes de lois suivants si tu les trouves pertinent,\n "
     prompt+= "N'hesite pas à bien développé tes arguments et à citer les texte avec des tirets \n "
+    prompt+= f"Vérifie si cette mise en demeure est conforme à la législation française en vigueur et introduit les valeurs des termes suivant, en les reformulant si besoin : la date de rédaction {date_redaction} ; les coordonnées du destinataire - valeur : {coordonne_destinataire} ; les coordonnées de l'expéditeur - valeur : {coordonne_expediteur} ; un bref exposé du litige - valeur : {bref_expose_litige} : il est important de décrire clairement les circonstances qui ont donné naissance au litige pour éviter toute mauvaise compréhension de la part du destinataire ; la mention mise en demeure  : cette mention indique au destinataire qu'il s'agit de la première étape d'une procédure qui vous permettra ensuite de saisir le juge si vous n'obtenez pas de réponse satisfaisante ; la réclamation, soit ce que doit effectuer le destinataire afin de régler le litige - valeur : {reclamation}; un délai précis et raisonnable durant lequel le destinataire devra régler le litige, compris le plus souvent entre 8 et 15 jours selon la nature du litige - valeur : {delai} ; la signature de l'expéditeur."
     prompt+= " Voici les textes de lois : \n"
 
     for text in liste_texte_loi:
@@ -70,7 +78,7 @@ if __name__ == '__main__':
             fondements_liste.append(f.split("[/FONDEMENT]")[0] )
             
     
-        
+#prend la lettre et un fondement en entrée, et retourne la lettre re rédigée sans le fondement énoncé
 def enlever_fondement_nul(lettre, fondement):
     prompt = "Je vais te donner un courrier d'avocat, le voici:\n" + lettre + "\n Je veux que tu enlèves ce fondement juridique en particulier, il est très important que tu ne rajoutes pas d'autres fondements, réécris juste la lettre sans ce fondement en particulier, car l'avocat référrent et sénior considère que ce n'est pas nécessaire. Je parle de ce fondement là:\n"+ fondement
     return appel_mistral(prompt)
