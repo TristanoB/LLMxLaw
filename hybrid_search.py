@@ -23,11 +23,11 @@ def hybrid_search(query, k=3, keyword_weight=0.3, semantic_weight=0.7):
     
     # Recherche sémantique (embeddings)
     semantic_results = db_CCom.similarity_search_with_relevance_scores(query, k=k)
-    print("Résultats sémantiques:", semantic_results)
+
     
     # Recherche par mots-clés
     keyword_results = keyword_search(query, k=k)
-    print("Résultats par mots-clés:", keyword_results)
+
 
     # Fusionner les résultats avec pondération (ex. 70% sémantique, 30% mots-clés)
     combined_results = {}
@@ -57,7 +57,7 @@ def keyword_search(query, k=5):
     :param k: Nombre de résultats à retourner
     """
     keywords = query.split()  # Divise la requête en mots-clés simples
-    print("Mots-clés extraits de la requête:", keywords)
+
     
     #### EXTRACTION MOTS IMPORTANTS ####
     
@@ -77,6 +77,8 @@ def keyword_search(query, k=5):
 # Exemple de requête
 query = "Un voisin ne veut pas payer ses charges"
 results = hybrid_search(query)
-print("\n\n\nRésultats combinés:", results)
+
 
 # Affichage des résultats
+if __name__== '__main__':
+    print(1)
