@@ -53,7 +53,7 @@ def is_ok(lettre, liste_texte_loi):
 
 #prend la lettre et un fondement en entrée, et retourne la lettre re rédigée sans les fondements énoncés
 def enlever_fondement_nul(lettre, fondement):
-    prompt = "Je vais te donner un courrier d'avocat, le voici:\n" + lettre + "\n Je veux que tu enlèves ce fondement juridique en particulier, il est très important que tu ne rajoutes pas d'autres fondements, réécris juste la lettre sans ce fondement en particulier, car l'avocat référrent et sénior considère que ce n'est pas nécessaire. Je parle de ce fondement là:\n"+ fondement
+    prompt = "Je vais te donner un courrier d'avocat, le voici:\n" + lettre + "\n Je veux que tu enlèves ces fondements juridiques en particulier, il est très important que tu ne rajoutes pas d'autres fondements, réécris juste la lettre sans ce fondement en particulier, car l'avocat référrent et sénior considère que ce n'est pas nécessaire. Je parle de ce fondement là:\n"+ "\n".join(fondement)
     return appel_mistral(prompt)
 
 if __name__ == '__main__':
