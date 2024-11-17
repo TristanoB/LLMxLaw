@@ -65,7 +65,7 @@ if __name__ == '__main__':
     fondements = appel_mistral(prompt)
     fondements_liste = []
     for f in fondements.split("[FONDEMENT]"):
-        if len(f.split("[/FONDEMENT]")) > 0:
+        if "[/FONDEMENT]" in f:
             fondements_liste.append(f.split("[/FONDEMENT]")[0] )
             
     
