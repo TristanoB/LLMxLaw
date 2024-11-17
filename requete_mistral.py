@@ -69,7 +69,7 @@ if __name__ == '__main__':
        
 
 
-    prompt = "Je vais te donner un courrier d'avocat, j'ai besoin que tu m'extraies toutes les citations juridiques de cette lettre. Voici la lettre :\n" + lettre + "\n je veux que tu me le fasses absolument sous le format suivant, c'est très important: [FONDEMENT]référence n°1[/FONDEMENT][FONDEMENT]référence n°2[/FONDEMENT][FONDEMENT]référence n°3[/FONDEMENT]etc..."
+    prompt = "Je vais te donner un courrier d'avocat, j'ai besoin que tu m'extraies toutes les citations juridiques (uniquement les articles et jurisprudences, pas les textes en tant que tel stp, JE VEUX UNIQUEMENT LA RÉFÉRENCE) de cette lettre. Voici la lettre :\n" + lettre + "\n je veux que tu me le fasses absolument sous le format suivant, c'est très important: [FONDEMENT]référence n°1[/FONDEMENT][FONDEMENT]référence n°2[/FONDEMENT][FONDEMENT]référence n°3[/FONDEMENT]etc..."
     fondements = appel_mistral(prompt)
     fondements_liste = []
     for f in fondements.split("[FONDEMENT]"):
