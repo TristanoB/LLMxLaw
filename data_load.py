@@ -4,7 +4,7 @@ from docx import Document
 import os
 
 # Charger le document DOCX
-file_path = "C:\\Users\\trist\\Documents\\dev\\LLMxLaw\\LLMxLaw\\database"
+file_path = "database/"
 
 processed_files = {}
 
@@ -38,7 +38,7 @@ for name, text in processed_files.items() :
         articles.append({"article": f'{name} - {title}', "content": content})
 
     # Exporter les articles dans un fichier JSON
-    output_path = f"C:\\Users\\trist\\Documents\\dev\\LLMxLaw\\LLMxLaw\\data_test\\all_articles.json"
+    output_path = f"all_articles.json"
     with open(output_path, "w", encoding="utf-8") as f:
         json.dump(articles, f, ensure_ascii=False, indent=4)
 
