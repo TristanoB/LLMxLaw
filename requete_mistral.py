@@ -11,7 +11,7 @@ def appel_mistral(texte):
         response = client.chat.complete(
             model=model_name,
             messages=[
-                {"role": "user", "content": texte}
+                {"role": "Tu es un avocat dans le droit immobilier, tu connais parfaitement le droit, et on te fournira des textes les plus pertinents pour répondre à ce dont tu as besoin. Il est très important que tu respectes les consignes pour satisfaire ton client.", "content": texte}
             ]
         )
 
@@ -38,6 +38,10 @@ def make_final_prompt(liste_texte_loi, pb):
 
     return prompt 
 
+def is_ok(lettre, liste_texte_loi):
+    prompt = "Voici un courrier d'avocat: \n" + lettre + "\n et voici un ensemble de texte de lois: \n" + "\n".join(liste_texte_loi) + "\n Je veux que tu compares ce qui est cité dans la lettre et dans la liste. Si il y a un fondement juridique qui est dans la lettre et pas dans la liste, renvoie toujours FALSE, sinon renvoie toujours TRUE, renvoie UNIQUEMENT CETTE VALEUR, RIEN DE PLUS SINON ÇA VA BUGGER"
+    return appel_mistral(prompt)
+
 
 if __name__ == '__main__':
 
@@ -48,9 +52,21 @@ if __name__ == '__main__':
     pb=" Mon propriétaire indique dans mon contrat de location que le salon fait partie de la partie privée de ma colocataire et qu'il n'y a pas de partie commune"
 
     texte =make_final_prompt(liste_texte_loi, pb)
+    lettre =  appel_mistral(texte)
+    
+    while is_ok(lettre, liste_texte_loi) == "FALSE" :
+        
 
-    print(appel_mistral(texte))
+        lettre = appel_mistral(texte + "Cite uniquement les citations que je t'ai donné et vraiment rien d'autre, c'est très très important")
+       
 
 
-
-
+    prompt = "Je vais te donner un courrier d'avocat, j'ai besoin que tu m'extraies toutes les citations juridiques de cette lettre. Voici la lettre :\n" + lettre + "\n je veux que tu me le fasses absolument sous le format suivant, c'est très important: [FONDEMENT]référence n°1[/FONDEMENT][FONDEMENT]référence n°2[/FONDEMENT][FONDEMENT]référence n°3[/FONDEMENT]etc..."
+    fondements = appel_mistral(prompt)
+    fondements_liste = []
+    for f in fondements.split("[FONDEMENT]"):
+        if len(f.split("[/FONDEMENT]")) > 0:
+            fondements_liste.append(f.split("[/FONDEMENT]")[0] )
+            
+    
+        
