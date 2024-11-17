@@ -11,7 +11,7 @@ CHROMA_PATH_CCom = "chroma_code-immo"
 db_CCom = Chroma(persist_directory=CHROMA_PATH_CCom, embedding_function=embedding_function)
 
 # Fonction de recherche hybride
-def hybrid_search(query, k=3, keyword_weight=0.3, semantic_weight=0.7):
+def hybrid_search(query, k=5, keyword_weight=0.3, semantic_weight=0.7):
     """
     Combine la recherche sémantique et par mots-clés pour renvoyer des résultats hybrides.
     :param database: Base de données Chroma
@@ -64,21 +64,21 @@ def keyword_search(query, k=5):
     keyword_results = []
     
     # Recherche par mots-clés dans les documents
-    for doc, _ in db_CCom.similarity_search_with_relevance_scores(query, k=3*k):
+    for doc, _ in db_CCom.similarity_search_with_relevance_scores(query, k=k):
         score = 0
         for keyword in keywords:
             if re.search(r'\b' + re.escape(keyword) + r'\b', doc.page_content) and len(keyword) > 5:  # Correspondance exacte
                 score += 1
-        if score > 0:
+        if score > len(keywords)/2:
             keyword_results.append((doc, score))
     
     return keyword_results
 
 # Exemple de requête
-query = "Un voisin ne veut pas payer ses charges"
+query = "Un voisin de mon immeuble ne veut pas payer ses charges de copropriété"
 results = hybrid_search(query)
 
 
 # Affichage des résultats
 if __name__== '__main__':
-    print(1)
+    print(results)
