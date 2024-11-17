@@ -4,53 +4,27 @@ import tkinter as tk
 from tkinter import filedialog
 from hybrid_search import *
 from tkinter import ttk
-import threading
-import time
 
 out_put_path="C:/Users/Utilisateur/Downloads/lettre_jurydique.docx"
 
-def afficher_chargement():
-    animation = ["Chargement.", "Chargement..", "Chargement..."]
-    i = 0
-    while chargement_actif:
-        zone_affichage.config(state='normal')
-        zone_affichage.delete("1.0", tk.END)
-        zone_affichage.insert(tk.END, animation[i % len(animation)])
-        zone_affichage.config(state='disabled')
-        i += 1
-        time.sleep(0.5)
 
-def long_traitement():
-    global chargement_actif
-    chargement_actif = True
-    threading.Thread(target=afficher_chargement, daemon=True).start()  # Démarre l'animation
-
-    # Simuler un traitement long
-    texte = entree_texte.get("1.0", tk.END) 
-    liste_texte_loi=hybrid_search(texte)
-    texte_final=make_final_prompt(liste_texte_loi, texte)
-    reponse=appel_mistral(texte_final)
-    prompt = "Je vais te donner un courrier d'avocat, j'ai besoin que tu m'extraies toutes les citations juridiques de cette lettre. Voici la lettre :\n" + reponse + "\n je veux que tu me le fasses absolument sous le format suivant, c'est très important: [FONDEMENT]référence n°1[/FONDEMENT][FONDEMENT]référence n°2[/FONDEMENT][FONDEMENT]référence n°3[/FONDEMENT]etc..."
-    fondements = appel_mistral(prompt)
-    fondements_liste = []
-    for f in fondements.split("[FONDEMENT]"):
-        if "[/FONDEMENT]" in f:
-            fondements_liste.append(f.split("[/FONDEMENT]")[0] )
-
-    # Une fois le traitement terminé
-    chargement_actif = False
-    afficher_texte(reponse)
-
+def save_letter_to_word(letter_text, output_path):
+    document = Document()
+    document.add_paragraph(letter_text)
+    document.save(output_path)
+    print('fichier bien enregistré')
 
 
 # Fonction qui sera exécutée lorsque le bouton est cliqué
 def envoyer():
-    texte = entree_texte.get("1.0", tk.END).strip()  # Récupère le texte de l'entrée
-    if texte:
-        threading.Thread(target=long_traitement, daemon=True).start()  # Lancer dans un thread
-    else:
-        afficher_texte("Veuillez saisir du texte avant d'envoyer.")
 
+    texte = entree_texte.get("1.0", tk.END) 
+    afficher_texte("Recherche texte loi...")
+    liste_texte_loi=hybrid_search(texte)
+    afficher_texte("Rédaction de la lettre...")
+    texte_final=make_final_prompt(liste_texte_loi, texte)
+    reponse=appel_mistral(texte_final)
+    afficher_texte(reponse)
 
 # Fonction pour afficher un texte donné
 def afficher_texte(texte_a_afficher):
@@ -93,7 +67,7 @@ if __name__ == '__main__':
     main_frame.pack(fill=tk.BOTH, expand=True)
 
     # Création d'une zone de texte pour un paragraphe
-    entree_label = ttk.Label(main_frame, text="Veuillez saisir votre texte :", font=("Helvetica", 12))
+    entree_label = ttk.Label(main_frame, text="Quel est votre problème ? ", font=("Helvetica", 12))
     entree_label.pack(anchor='w', pady=(0, 5))
 
     entree_texte = tk.Text(main_frame, height=10, width=80, font=("Helvetica", 11))
@@ -112,11 +86,11 @@ if __name__ == '__main__':
     bouton_download.pack(side=tk.LEFT, padx=5)
 
     # Zone pour afficher le texte fourni (affichée en dessous)
-    label_affichage = ttk.Label(main_frame, text="Réponse du modèle :", font=("Helvetica", 12))
+    label_affichage = ttk.Label(main_frame, text="Lettre:", font=("Helvetica", 12))
     label_affichage.pack(anchor='w', pady=(20, 5))
 
     zone_affichage = tk.Text(main_frame, height=15, width=80, font=("Helvetica", 11))
-    zone_affichage.config(state='disabled', bg='#f0f0f0')
+    zone_affichage.config(state='normal', bg='#f0f0f0')
     zone_affichage.pack(pady=(0, 10), fill=tk.BOTH, expand=True)
 
     # Ajustement de la taille minimale de la fenêtre
