@@ -30,6 +30,22 @@ def envoyer():
     afficher_texte(reponse)
     afficher_fondement(fondements_liste)
 
+def re_run():
+     
+    selection = [element for element, var in valeurs_cases.items() if var.get()]
+    # Vous pouvez ici utiliser 'selection' selon vos besoins (supprimer, afficher, etc.)
+    texte = entree_texte.get("1.0", tk.END) 
+
+    reponse=appel_mistral(texte_final)
+    prompt = "Je vais te donner un courrier d'avocat, j'ai besoin que tu m'extraies toutes les citations juridiques de cette lettre. Voici la lettre :\n" + reponse + "\n je veux que tu me le fasses absolument sous le format suivant, c'est très important: [FONDEMENT]référence n°1[/FONDEMENT][FONDEMENT]référence n°2[/FONDEMENT][FONDEMENT]référence n°3[/FONDEMENT]etc..."
+    fondements = appel_mistral(prompt)
+    fondements_liste = []
+    for f in fondements.split("[FONDEMENT]"):
+        if "[/FONDEMENT]" in f:
+            fondements_liste.append(f.split("[/FONDEMENT]")[0] )
+    afficher_texte(reponse)
+    afficher_fondement(fondements_liste)
+
 # Fonction pour afficher un texte donné
 def afficher_texte(texte_a_afficher):
     # Supprime le contenu précédent dans la zone d'affichage
@@ -38,7 +54,8 @@ def afficher_texte(texte_a_afficher):
     zone_affichage.insert(tk.END, texte_a_afficher)
 
 
-def afficher_fondement(liste_elements, cadre_parent):
+def afficher_fondement(liste_elements):
+    global cadre_cases_parent, valeurs_cases
     """
     Affiche les cases à cocher dans le cadre fourni.
     
@@ -47,7 +64,7 @@ def afficher_fondement(liste_elements, cadre_parent):
         cadre_parent (tk.Frame): Cadre où les cases à cocher seront placées.
     """
     # Effacer les widgets existants dans le cadre_parent pour éviter le chevauchement
-    for widget in cadre_parent.winfo_children():
+    for widget in cadre_cases_parent.winfo_children():
         widget.destroy()
 
     # Dictionnaire pour stocker les valeurs des cases à cocher
@@ -59,7 +76,7 @@ def afficher_fondement(liste_elements, cadre_parent):
         var = tk.BooleanVar()
         valeurs_cases[element] = var
         # Ajout d'une case à cocher
-        case = ttk.Checkbutton(cadre_parent, text=element, variable=var)
+        case = ttk.Checkbutton(cadre_cases_parent, text=element, variable=var)
         case.grid(row=idx, column=0, sticky='w', padx=(0, 5), pady=2)
 
     # Fonction pour afficher les éléments sélectionnés
@@ -68,7 +85,7 @@ def afficher_fondement(liste_elements, cadre_parent):
         print("Éléments sélectionnés :", selection)
 
     # Bouton pour valider les choix
-    bouton_valider = ttk.Button(cadre_parent, text="Valider", command=afficher_selection)
+    bouton_valider = ttk.Button(cadre_cases_parent, text="enlever", command=re_run)
     bouton_valider.grid(row=len(liste_elements), column=0, sticky='w', padx=5, pady=10)
 
 
@@ -128,7 +145,7 @@ if __name__ == '__main__':
     label_affichage.pack(anchor='w', pady=(20, 5))
 
     zone_affichage = tk.Text(main_frame, height=10, width=80, font=("Helvetica", 11))
-    zone_affichage.config(state='disabled', bg='#f0f0f0')
+    zone_affichage.config(state='normal', bg='#f0f0f0')
     zone_affichage.pack(pady=(0, 10), fill=tk.BOTH, expand=True)
 
     # Cadre pour les fondements juridiques

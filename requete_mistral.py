@@ -52,6 +52,11 @@ def is_ok(lettre, liste_texte_loi):
     return appel_mistral(prompt)
 
 
+#prend la lettre et un fondement en entrée, et retourne la lettre re rédigée sans le fondement énoncé
+def enlever_fondement_nul(lettre, fondement):
+    prompt = "Je vais te donner un courrier d'avocat, le voici:\n" + lettre + "\n Je veux que tu enlèves ce fondement juridique en particulier, il est très important que tu ne rajoutes pas d'autres fondements, réécris juste la lettre sans ce fondement en particulier, car l'avocat référrent et sénior considère que ce n'est pas nécessaire. Je parle de ce fondement là:\n"+ fondement
+    return appel_mistral(prompt)
+
 if __name__ == '__main__':
 
     liste_texte_loi=["Art. 1er  (Ord. no 2019-1101 du 30 oct. 2019, art. 2, en vigueur le 1er juin 2020)  'I. — La présente loi régit tout immeuble bâti ou groupe d'immeubles bâtis à usage total ou partiel d'habitation dont la propriété est répartie par lots entre plusieurs personnes' ", 
@@ -78,7 +83,4 @@ if __name__ == '__main__':
             fondements_liste.append(f.split("[/FONDEMENT]")[0] )
             
     
-#prend la lettre et un fondement en entrée, et retourne la lettre re rédigée sans le fondement énoncé
-def enlever_fondement_nul(lettre, fondement):
-    prompt = "Je vais te donner un courrier d'avocat, le voici:\n" + lettre + "\n Je veux que tu enlèves ce fondement juridique en particulier, il est très important que tu ne rajoutes pas d'autres fondements, réécris juste la lettre sans ce fondement en particulier, car l'avocat référrent et sénior considère que ce n'est pas nécessaire. Je parle de ce fondement là:\n"+ fondement
-    return appel_mistral(prompt)
+
