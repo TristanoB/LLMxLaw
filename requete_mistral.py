@@ -42,7 +42,7 @@ def make_final_prompt(liste_texte_loi, pb, inputs_user):
     for text in liste_texte_loi:
         prompt+= text + "\n"
 
-    prompt+= "\n" + "Fais moi uniquement la lettre et ne mets pas en gras ou en itallique"
+    prompt+= "\n" + "Fais moi uniquement la lettre et ne mets pas en gras ou en itallique. Je veux absolument que tu mettes cette phrase: 'Par ailleurs, je vous informe que la présente mise en demeure fait courir des intérêts au taux légal conformément aux dispositions de l’article 1344-1 du Code civil.'"
 
     return prompt 
 
