@@ -70,3 +70,6 @@ if __name__ == '__main__':
             
     
         
+def enlever_fondement_nul(lettre, fondement):
+    prompt = "Je vais te donner un courrier d'avocat, le voici:\n" + lettre + "\n Je veux que tu enlèves ce fondement juridique en particulier, il est très important que tu ne rajoutes pas d'autres fondements, réécris juste la lettre sans ce fondement en particulier, car l'avocat référrent et sénior considère que ce n'est pas nécessaire. Je parle de ce fondement là:\n"+ fondement
+    return appel_mistral(prompt)
