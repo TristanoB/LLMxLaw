@@ -14,12 +14,27 @@ def save_letter_to_word(letter_text, output_path):
     document.save(output_path)
     print('fichier bien enregistré')
 
+def recuperer_informations():
+    """
+    Récupère les informations saisies dans les champs et affiche le dictionnaire résultant.
+    """
+    informations = {
+        "date_redaction": champs["date_redaction"].get(),
+        "coordonne_destinataire": champs["coordonne_destinataire"].get(),
+        "coordonne_expediteur": champs["coordonne_expediteur"].get(),
+        "bref_expose_litige": champs["bref_expose_litige"].get(),
+        "reclamation": champs["reclamation"].get(),
+        "delai": champs["delai"].get()
+    }
+    return informations
+
 
 # Fonction qui sera exécutée lorsque le bouton est cliqué
 def envoyer():
     texte = entree_texte.get("1.0", tk.END) 
+    informations=recuperer_informations()
     liste_texte_loi=hybrid_search(texte)
-    texte_final=make_final_prompt(liste_texte_loi, texte)
+    texte_final=make_final_prompt(liste_texte_loi, texte, inputs_user=informations)
     reponse=appel_mistral(texte_final)
     prompt = "Je vais te donner un courrier d'avocat, j'ai besoin que tu m'extraies toutes les citations juridiques de cette lettre. Voici la lettre :\n" + reponse + "\n je veux que tu me le fasses absolument sous le format suivant, c'est très important: [FONDEMENT]référence n°1[/FONDEMENT][FONDEMENT]référence n°2[/FONDEMENT][FONDEMENT]référence n°3[/FONDEMENT]etc..."
     fondements = appel_mistral(prompt)
@@ -131,8 +146,34 @@ if __name__ == '__main__':
     entree_label = ttk.Label(main_frame, text="Quel est votre problème ?", font=("Helvetica", 12))
     entree_label.pack(anchor='w', pady=(0, 5))
 
-    entree_texte = tk.Text(main_frame, height=5, width=80, font=("Helvetica", 11))
+    entree_texte = tk.Text(main_frame, height=3, width=80, font=("Helvetica", 11))
     entree_texte.pack(pady=(0, 10), fill=tk.BOTH, expand=True)
+    champs = {}
+
+    # Liste des étiquettes et clés
+    labels = {
+        "date_redaction": "Date de rédaction",
+        "coordonne_destinataire": "Coordonnées du destinataire",
+        "coordonne_expediteur": "Coordonnées de l'expéditeur",
+        "bref_expose_litige": "Bref exposé du litige",
+        "reclamation": "Réclamation",
+        "delai": "Délai"
+    }
+
+    # Création des champs
+    for idx, (key, label) in enumerate(labels.items()):
+        # Label
+        row_frame = ttk.Frame(main_frame)
+        row_frame.pack(fill=tk.X, pady=5)
+
+        ttk.Label(row_frame, text=label, font=("Helvetica", 10)).pack(side=tk.LEFT, padx=5)
+
+        # Champ de saisie
+        entry = ttk.Entry(row_frame, width=50)
+        entry.pack(side=tk.LEFT, padx=5, expand=True, fill=tk.X)
+        champs[key] = entry  # Stockage du champ dans le dictionnaire
+
+
 
     # Cadre pour organiser les boutons horizontalement
     cadre_boutons = ttk.Frame(main_frame)
