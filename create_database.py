@@ -57,6 +57,6 @@ def prepare_chunks_from_json(data: list[dict]):
     return chunks, metadata
 
 # Exemple d'utilisation
-data = load_json_data("articles_test.docx.json")  # Remplace par le chemin de ton fichier JSON
+data = load_json_data("all_articles.json")  # Remplace par le chemin de ton fichier JSON
 chunks, metadata = prepare_chunks_from_json(data)
 save_to_chroma(chunks, metadata)
