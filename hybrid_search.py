@@ -63,7 +63,7 @@ def keyword_search(database, query, k=5):
     keyword_results = []
     
     # Recherche par mots-clés dans les documents
-    for doc, _ in database.similarity_search_with_relevance_scores(query, k=k):
+    for doc, _ in database.similarity_search_with_relevance_scores(query, k=10*k):
         score = 0
         for keyword in keywords:
             if re.search(r'\b' + re.escape(keyword) + r'\b', doc.page_content):  # Correspondance exacte
