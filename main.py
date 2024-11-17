@@ -30,11 +30,16 @@ def long_traitement():
     liste_texte_loi=hybrid_search(texte)
     texte_final=make_final_prompt(liste_texte_loi, texte)
     reponse=appel_mistral(texte_final)
-    afficher_texte(reponse)
+    prompt = "Je vais te donner un courrier d'avocat, j'ai besoin que tu m'extraies toutes les citations juridiques de cette lettre. Voici la lettre :\n" + reponse + "\n je veux que tu me le fasses absolument sous le format suivant, c'est très important: [FONDEMENT]référence n°1[/FONDEMENT][FONDEMENT]référence n°2[/FONDEMENT][FONDEMENT]référence n°3[/FONDEMENT]etc..."
+    fondements = appel_mistral(prompt)
+    fondements_liste = []
+    for f in fondements.split("[FONDEMENT]"):
+        if "[/FONDEMENT]" in f:
+            fondements_liste.append(f.split("[/FONDEMENT]")[0] )
 
     # Une fois le traitement terminé
     chargement_actif = False
-    afficher_texte("Le traitement est terminé ! Voici votre réponse.")
+    afficher_texte(reponse)
 
 
 
