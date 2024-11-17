@@ -25,7 +25,7 @@ def appel_mistral(texte):
 
 
 def make_final_prompt(liste_texte_loi, pb): 
-    prompt="Bonjour Mistral, j'ai un problème de droit immobilier. Voici mon problème : \n"
+    prompt="j'ai un problème de droit immobilier. Voici mon problème : \n"
     prompt+= pb + "\n"
     prompt+= "J'aimerais que tu me fasses un courrier d'avocat en utilisant les textes de lois suivants si tu les trouves pertinent,\n "
     prompt+= "N'hesite pas à bien développé tes arguments et à citer les texte avec des tirets \n "
