@@ -23,21 +23,20 @@ def appel_mistral(texte):
 
     return Reponse
 
+inputs_user_example = {"date_redaction" : None,
+"coordonne_destinataire" : None,
+"coordonne_expediteur" : None,
+"bref_expose_litige" : None,
+"reclamation" : None,
+"delai" : None }
 
-date_redaction = None
-coordonne_destinataire = None
-coordonne_expediteur = None
-bref_expose_litige = None
-reclamation = None
-delai = None
-
-def make_final_prompt(liste_texte_loi, pb): 
+def make_final_prompt(liste_texte_loi, pb, inputs_user): 
     prompt= "Tu es un avocat dans le droit immobilier, tu connais parfaitement le droit, et on te fournira des textes les plus pertinents pour répondre à ce dont tu as besoin. Il est très important que tu respectes les consignes pour satisfaire ton client."
     prompt+="j'ai un problème de droit immobilier. Voici mon problème : \n"
     prompt+= pb + "\n"
     prompt+= "J'aimerais que tu me fasses un courrier d'avocat en utilisant les textes de lois suivants si tu les trouves pertinent,\n "
     prompt+= "N'hesite pas à bien développé tes arguments et à citer les texte avec des tirets \n "
-    prompt+= f"Vérifie si cette mise en demeure est conforme à la législation française en vigueur et introduit les valeurs des termes suivant, en les reformulant si besoin : la date de rédaction {date_redaction} ; les coordonnées du destinataire - valeur : {coordonne_destinataire} ; les coordonnées de l'expéditeur - valeur : {coordonne_expediteur} ; un bref exposé du litige - valeur : {bref_expose_litige} : il est important de décrire clairement les circonstances qui ont donné naissance au litige pour éviter toute mauvaise compréhension de la part du destinataire ; la mention mise en demeure  : cette mention indique au destinataire qu'il s'agit de la première étape d'une procédure qui vous permettra ensuite de saisir le juge si vous n'obtenez pas de réponse satisfaisante ; la réclamation, soit ce que doit effectuer le destinataire afin de régler le litige - valeur : {reclamation}; un délai précis et raisonnable durant lequel le destinataire devra régler le litige, compris le plus souvent entre 8 et 15 jours selon la nature du litige - valeur : {delai} ; la signature de l'expéditeur."
+    prompt+= f"Vérifie si cette mise en demeure est conforme à la législation française en vigueur et introduit les valeurs des termes suivant, en les reformulant si besoin : la date de rédaction {inputs_user["date_redaction"]} ; les coordonnées du destinataire - valeur : {inputs_user["coordonne_destinataire"]} ; les coordonnées de l'expéditeur - valeur : {inputs_user["coordonne_expediteur"]} ; un bref exposé du litige - valeur : {inputs_user["bref_expose_litige"]} : il est important de décrire clairement les circonstances qui ont donné naissance au litige pour éviter toute mauvaise compréhension de la part du destinataire ; la mention mise en demeure  : cette mention indique au destinataire qu'il s'agit de la première étape d'une procédure qui vous permettra ensuite de saisir le juge si vous n'obtenez pas de réponse satisfaisante ; la réclamation, soit ce que doit effectuer le destinataire afin de régler le litige - valeur : {inputs_user["reclamation"]}; un délai précis et raisonnable durant lequel le destinataire devra régler le litige, compris le plus souvent entre 8 et 15 jours selon la nature du litige - valeur : {inputs_user["delai"]} ; la signature de l'expéditeur."
     prompt+= " Voici les textes de lois : \n"
 
     for text in liste_texte_loi:
