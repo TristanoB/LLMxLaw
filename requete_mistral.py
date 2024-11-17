@@ -30,7 +30,7 @@ inputs_user_example = {"date_redaction" : None,
 "reclamation" : None,
 "delai" : None }
 
-def make_final_prompt(liste_texte_loi, pb, inputs_user): 
+def make_final_prompt(liste_texte_loi, pb, inputs_user=inputs_user_example): 
     prompt= "Tu es un avocat dans le droit immobilier, tu connais parfaitement le droit, et on te fournira des textes les plus pertinents pour répondre à ce dont tu as besoin. Il est très important que tu respectes les consignes pour satisfaire ton client."
     prompt+="j'ai un problème de droit immobilier. Voici mon problème : \n"
     prompt+= pb + "\n"
