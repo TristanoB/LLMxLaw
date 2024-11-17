@@ -11,7 +11,7 @@ def appel_mistral(texte):
         response = client.chat.complete(
             model=model_name,
             messages=[
-                {"role": "Tu es un avocat dans le droit immobilier, tu connais parfaitement le droit, et on te fournira des textes les plus pertinents pour répondre à ce dont tu as besoin. Il est très important que tu respectes les consignes pour satisfaire ton client.", "content": texte}
+                {"role": "user", "content": texte}
             ]
         )
 
@@ -19,13 +19,14 @@ def appel_mistral(texte):
         Reponse= response.choices[0].message.content
 
     except Exception as e:
-        Reponse= "ERREUR"
+        Reponse= "OUPS! une erreur est survenue "
 
     return Reponse
 
 
 def make_final_prompt(liste_texte_loi, pb): 
-    prompt="j'ai un problème de droit immobilier. Voici mon problème : \n"
+    prompt= "Tu es un avocat dans le droit immobilier, tu connais parfaitement le droit, et on te fournira des textes les plus pertinents pour répondre à ce dont tu as besoin. Il est très important que tu respectes les consignes pour satisfaire ton client."
+    prompt+="j'ai un problème de droit immobilier. Voici mon problème : \n"
     prompt+= pb + "\n"
     prompt+= "J'aimerais que tu me fasses un courrier d'avocat en utilisant les textes de lois suivants si tu les trouves pertinent,\n "
     prompt+= "N'hesite pas à bien développé tes arguments et à citer les texte avec des tirets \n "
